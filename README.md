@@ -5,7 +5,7 @@
 "repositories": [
       {
           "type": "git",
-          "url": "https://github.com/geechsInc/Laravel-kintoneRestAPI.git"
+          "url": "https://geechs-tech-web@github.com/geechsInc/Laravel-kintoneRestAPI.git"
       }
   ],
 
@@ -17,7 +17,7 @@
 
 ##composerのアップデート
 ```
-$ composer update
+$ sudo composer update
 ```
 上記でvendor/geechs/kintone-rest-apiが作成される
 
