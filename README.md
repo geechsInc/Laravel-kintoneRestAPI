@@ -52,7 +52,7 @@ $ composer update
 $ php artisan vendor:publish
 ```
 
-```config/kintone-rest-api.php```が作成されるため、該当項目を編集する。
+config/kintone-rest-api.php が作成されるため、該当項目を編集する。
 
 
 
