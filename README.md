@@ -67,3 +67,6 @@ Route::get('/', function()
 
 });
 ```
+
+##使用方法
+wikiをご覧下さい。
