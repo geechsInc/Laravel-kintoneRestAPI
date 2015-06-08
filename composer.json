@@ -1,0 +1,20 @@
+{
+    "name": "geechs/kintone-rest-api",
+    "description": "",
+    "authors": [
+        {
+            "name": "geechs",
+            "email": "yhamada@geechs.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.*|5.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Geechs\\KintoneRestApi": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
