@@ -5,7 +5,7 @@
 "repositories": [
       {
           "type": "git",
-          "url": "https://geechs-tech-web@github.com/geechsInc/Laravel-kintoneRestAPI.git"
+          "url": "https://github.com/geechsInc/Laravel-kintoneRestAPI.git"
       }
   ],
 
