@@ -37,7 +37,7 @@ class KintoneRestApi{
 /*
 |--------------------------------------------------------------------------
 | CRUD
-|-------------------------------------------------------------------------- 
+|--------------------------------------------------------------------------
 */
 
 	public function getById($appID, $id)
@@ -45,6 +45,21 @@ class KintoneRestApi{
 		$command = $this->command['record']['oneRecord'];
 
 		$request = $this->request->get(['app' => $appID, 'id' => $id], $command);
+
+		$response = new Response($request);
+		return $response->getResponse();
+	}
+
+	public function getByQuery($appID, $query_options = NULL, $fields = NULL)
+	{
+		$command = $this->command['record']['allRecords'];
+
+		$query = '';
+		foreach ($query_options as $key) {
+			$query .= $key.' ';
+		}
+
+		$request = $this->request->get(['app' => $appID, 'query' => $query, 'fields' => $fields], $command);
 
 		$response = new Response($request);
 		return $response->getResponse();
@@ -77,7 +92,7 @@ class KintoneRestApi{
 		$command = $this->command['record']['allRecords'];
 
 		$request = $this->request->post(['postArgs' => $records], $command);
-		
+
 		$response = new Response($request);
 		return $response->getResponse();
 	}
@@ -91,7 +106,7 @@ class KintoneRestApi{
 
 		$command = $this->command['record']['oneRecord'];
 
-		$request = $this->request->put(['putArgs' => $record], $command);	
+		$request = $this->request->put(['putArgs' => $record], $command);
 
 		$response = new Response($request);
 		return $response->getResponse();
@@ -109,7 +124,7 @@ class KintoneRestApi{
 
 		$command = $this->command['record']['allRecords'];
 
-		$request = $this->request->put(['putArgs' => $records], $command);			
+		$request = $this->request->put(['putArgs' => $records], $command);
 
 		$response = new Response($request);
 		return $response->getResponse();
@@ -136,7 +151,7 @@ class KintoneRestApi{
 /*
 |--------------------------------------------------------------------------
 | Acl
-|-------------------------------------------------------------------------- 
+|--------------------------------------------------------------------------
 */
 	public function changeFieldAcl($appID, $put_records)
 	{
@@ -174,11 +189,11 @@ class KintoneRestApi{
 /*
 |--------------------------------------------------------------------------
 | Utility
-|-------------------------------------------------------------------------- 
+|--------------------------------------------------------------------------
 */
 	public function getAppInfo($appID = null)
 	{
-		$command = $appID != null ? 
+		$command = $appID != null ?
 			$this->command['appInfo']['oneApp'] : $this->command['appInfo']['allApps'];
 
 		$request = $this->request->get(['id' => $appID], $command);
@@ -201,7 +216,7 @@ class KintoneRestApi{
 	{
 		$command = $this->command['apiList'];
 
-		$request = $this->request->get([], $command);	
+		$request = $this->request->get([], $command);
 
 		$response = new Response($request);
 		return $response->getResponse();
