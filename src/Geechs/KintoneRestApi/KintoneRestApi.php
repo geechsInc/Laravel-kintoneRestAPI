@@ -50,17 +50,16 @@ class KintoneRestApi{
 		return $response->getResponse();
 	}
 
-	public function getByQuery($appID, $query_options)
+	public function getByQuery($appID, $query_options = NULL, $fields = NULL)
 	{
 		$command = $this->command['record']['allRecords'];
 
 		$query = '';
-		foreach ($query_options as $key => $value) {
+		foreach ($query_options as $key) {
 			$query .= $key.' ';
-			$query .= $value.' ';
 		}
 
-		$request = $this->request->get(['app' => $appID, 'query' => $query], $command);
+		$request = $this->request->get(['app' => $appID, 'query' => $query, 'fields' => $fields], $command);
 
 		$response = new Response($request);
 		return $response->getResponse();
