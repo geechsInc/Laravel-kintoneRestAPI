@@ -142,8 +142,66 @@ class Request {
 	{
 	}
 
-	public function postFile($params = [], $command)
+	public function upload($file_path, $command)
 	{
+		$url   = str_replace('{command}', $command, $this->url);
+		$query = '';
+
+		$curl_options = $this->buildFileUploadCurlOptions(['file' => $file_path]);
+		$this->setRequest($url. $query, $curl_options);
+		return $this;
+	}
+
+	/**
+	 * マルチパートボディを組み立て、curl option を設定
+	 * 
+	 * @param array $file = [file_type => file_path]
+	 * @return array
+	 */
+	private function buildFileUploadCurlOptions($file = [])
+	{
+	    static $disallow = array("\0", "\"", "\r", "\n");
+	    $body = [];
+
+		if (!is_file($file['file'])) throw new \Exception('File does not exists');
+		if (!is_readable($file['file'])) throw new \Exception('File is broken');
+
+		$file_path = realpath(filter_var($file['file']));
+		$file_name = call_user_func("end", explode(DIRECTORY_SEPARATOR, $file_path));
+		$file_type = key($file);
+
+		$data = file_get_contents($file_path);
+
+		list($file_type, $file_name) = str_replace($disallow, "_", [$file_type, $file_name]);
+		$body[] = implode("\r\n", [
+		    "Content-Disposition: form-data; name=\"{$file_type}\"; filename=\"{$file_name}\"",
+		    "Content-Type: application/octet-stream",
+		    "",
+		    $data,
+		]);
+
+	    do {
+	        $boundary = "---------------------" . md5(mt_rand() . microtime());
+	    } while (preg_grep("/{$boundary}/", $body));
+	    array_walk($body, function (&$part) use ($boundary) {
+	        $part = "--{$boundary}\r\n{$part}";
+	    });
+	    $body[] = "--{$boundary}--";
+	    $body[] = "";
+
+	    $curl_options = [
+	        CURLOPT_POST       => true,
+	        CURLOPT_RETURNTRANSFER => true,
+	        CURLOPT_POSTFIELDS => implode("\r\n", $body),
+	        CURLOPT_HTTPHEADER => [
+	            "Expect: 100-continue",
+	            "Content-Type: multipart/form-data; boundary={$boundary}",
+				'X-Cybozu-Authorization:'. $this->hashed_user_pass,
+				'X-Cybozu-API-Token:'. $this->api_token,
+			]
+		];
+
+	    return $curl_options; 
 	}
 
 	private function setRequest($url, $curl_options)
