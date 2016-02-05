@@ -144,10 +144,18 @@ class KintoneRestApi{
 	{
 	}
 
-	public function postFile($appID, $id = null, $post_file) // fileを挿入したいデータのid(id=null：新規作成)
+	/*
+	* fileKey を返す 
+	*/
+	public function upload($file_path)
 	{
-	}
+		$command = $this->command['file'];
 
+		$request = $this->request->upload($file_path, $command);
+
+		$response = new Response($request);
+		return $response->getResponse();
+	}
 /*
 |--------------------------------------------------------------------------
 | Acl
