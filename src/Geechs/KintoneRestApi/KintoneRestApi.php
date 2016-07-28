@@ -140,8 +140,12 @@ class KintoneRestApi{
 		return $response->getResponse();
 	}
 
-	public function getFile($appID, $id, $file_field_name)
+	public function download($file_key, $filename)
 	{
+		$command = $this->command['file'];
+
+		$res = $this->request->download(['fileKey' => $file_key], $filename, $command);
+		return $res;
 	}
 
 	/*

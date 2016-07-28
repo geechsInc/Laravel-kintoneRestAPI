@@ -138,8 +138,28 @@ class Request {
 		return $this;	
 	}
 
-	public function getFile($params = [], $command)
+	public function download($params = [], $filename, $command)
 	{
+		$url = str_replace('{command}', $command, $this->url);
+		$query = '?'. http_build_query($params);
+		$tmp = tmpfile();
+
+		$curl_options = [
+			CURLOPT_RETURNTRANSFER => true,
+	        CURLOPT_HTTPHEADER => [
+				'X-Cybozu-Authorization:'. $this->hashed_user_pass,
+				'X-Cybozu-API-Token:'. $this->api_token,
+			],
+			CURLOPT_FILE => $tmp,
+
+		];
+
+		$this->setRequest($url. $query, $curl_options);
+
+		$filepath = '/tmp/'. $filename;
+		@rename(stream_get_meta_data($tmp)['uri'], $filepath);
+
+		return $filepath;
 	}
 
 	public function upload($file_path, $command)
